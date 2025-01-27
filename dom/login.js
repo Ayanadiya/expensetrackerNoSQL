@@ -12,7 +12,7 @@ function login(event) {
         email,
         password
     }
-    axios.post('http://16.170.246.115:3000/user/login', user )
+    axios.post('http://127.0.0.1:3000/user/login', user )
     .then(result => {
         if(result.status===200)
         {
