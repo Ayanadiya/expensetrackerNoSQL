@@ -17,7 +17,7 @@ function addDailyexpense(event) {
         description,
         category
     }
-    axios.post('http://16.170.246.115:3000/expense/addexpense',expense,{headers: { 'Authorization': `Bearer ${token}` }})
+    axios.post('http://127.0.0.1:3000/expense/addexpense',expense,{headers: { 'Authorization': `Bearer ${token}` }})
     .then(result => {
         if(result.status===200)
         {
@@ -34,7 +34,7 @@ function addDailyexpense(event) {
 
 
 function deleteexpense(listitem, id){
-  axios.delete(`http://16.170.246.115:3000/expense/delete/${id}`)
+  axios.delete(`http://127.0.0.1:3000/expense/delete/${id}`)
   .then(res => {
     if(res.status===204)
     {
@@ -46,7 +46,7 @@ function deleteexpense(listitem, id){
 
 document.getElementById('ldrbrd-button').onclick = async function(e) {
     try {
-        const leadlist=await axios.get(`http://16.170.246.115:3000/premium/leaderboard`)
+        const leadlist=await axios.get(`http://127.0.0.1:3000/premium/leaderboard`)
         const leads=leadlist.data;
         if(leaderboard!=null)
         {
@@ -63,7 +63,7 @@ document.getElementById('ldrbrd-button').onclick = async function(e) {
 function addtoleaderboard(lead){
     const newli=document.createElement('li');
     newli.className="list-group-item";
-    newli.textContent=`Name:${lead.name}-Expense:${lead.totalexpense}`;
+    newli.textContent=`Name:${lead.name}-Expense:${lead.totalExpense}`;
     leaderboard.appendChild(newli);
 }
 
@@ -71,9 +71,10 @@ document.getElementById('downloadedfiles').addEventListener('click', downloadedf
 
 function downloadedfiles(){
     const token=localStorage.getItem('token');
-    axios.get('http://16.170.246.115:3000/premium/downloadedfiles', { headers: {"Authorization" : token} })
+    axios.get('http://127.0.0.1:3000/premium/downloadedfiles', { headers: {"Authorization" : token} })
     .then((response) => {
         const links=response.data;
+        console.log(links);
         if(links.length>0)
         {
             const downloadlinks=document.getElementById('downloads');
@@ -83,7 +84,7 @@ function downloadedfiles(){
             }
             links.forEach(link => {
                 const newli=document.createElement('li');
-                newli.textContent=`Date:${link.createdAt}`;
+                newli.textContent=`Date:${link.date}`;
                 var a = document.createElement("a");
                 a.href = link.links;
                 a.textContent=`Download file`

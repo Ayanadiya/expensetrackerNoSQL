@@ -44,7 +44,7 @@ exports.postlogin =async(req,res,next) => {
         const user= await User.findOne({email:email})
         if(user)
             {
-                const isPremiumuser=user.isPremiumuser;
+                const isPremiumuser=user.isPremium;
                 const isMatch= await bcrypt.compare(password,user.password)
                 if(isMatch)
                 {

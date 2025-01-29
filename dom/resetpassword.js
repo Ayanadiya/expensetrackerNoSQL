@@ -16,7 +16,7 @@ function resetpassword(event) {
         email,
         newpassword,
     };
-    axios.post('http://16.170.246.115:3000/password/updatepassword',data)
+    axios.post('http://127.0.0.1:3000/password/updatepassword',data)
     .then(result => {
         alert(result.data.message);
         window.location.href='/user/login';

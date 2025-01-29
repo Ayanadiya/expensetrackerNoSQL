@@ -48,7 +48,7 @@ function addDailyexpense(event) {
         description,
         category
     }
-    axios.post(`http://16.170.246.115:3000/expense/addexpense`,expense,{headers: { 'Authorization': `Bearer ${token}` }})
+    axios.post(`http://127.0.0.1:3000/expense/addexpense`,expense,{headers: { 'Authorization': `Bearer ${token}` }})
     .then(result => {
         if(result.status===200)
         {
@@ -70,15 +70,15 @@ function addtolist(expense){
     dltbtn.type="button"
     dltbtn.className='delete-btn';
     dltbtn.textContent="Delete";
-    dltbtn.onclick= () => deleteexpense(newli,expense.id);
+    dltbtn.onclick= () => deleteexpense(newli,expense._id);
     newli.appendChild(dltbtn);
     expenselist.appendChild(newli);
 }
 
 function deleteexpense(listitem, id){
-  axios.delete(`http://16.170.246.115:3000/expense/delete/${id}`)
+  axios.delete(`http://127.0.0.1:3000/expense/delete/${id}`)
   .then(res => {
-    if(res.status===204)
+    if(res.status===200)
     {
         expenselist.removeChild(listitem);
     } 
@@ -88,13 +88,13 @@ function deleteexpense(listitem, id){
 
 document.getElementById('rzp-button').onclick = async function(e) {
     const token=localStorage.getItem('token');
-    const response= await axios.get(`http://16.170.246.115:3000/purchase/premiummembership`, {headers: { 'Authorization': `Bearer ${token}` }})
+    const response= await axios.get(`http://127.0.0.1:3000/purchase/premiummembership`, {headers: { 'Authorization': `Bearer ${token}` }})
     console.log(response);
     var options ={
         key:response.data.key_id,
         order_id:response.data.order.id,
         handler: async function(response){
-            await axios.post(`http://16.170.246.115:3000/purchase/updatetransactionstatus`, {
+            await axios.post(`http://127.0.0.1:3000/purchase/updatetransactionstatus`, {
                 order_id:options.order_id,
                 payment_id:response.razorpay_payment_id,
                 status:'success'
@@ -111,7 +111,7 @@ document.getElementById('rzp-button').onclick = async function(e) {
     rzp1.on('payment.failed', async function(response){
         console.log(response);
         try{
-            await axios.post(`http://16.170.246.115:3000/purchase/updatetransactionstatus`, {
+            await axios.post(`http://127.0.0.1:3000/purchase/updatetransactionstatus`, {
                 order_id: options.order_id,
                 payment_id: response.error.metadata.payment_id,
                 status: 'failed'
@@ -131,7 +131,7 @@ document.getElementById('rzp-button').onclick = async function(e) {
 function download(){
     console.log('sending to axios');
     const token=localStorage.getItem('token');
-    axios.get('http://16.170.246.115:3000/premium/download', { headers: {"Authorization" : token} })
+    axios.get('http://127.0.0.1:3000/premium/download', { headers: {"Authorization" : token} })
     .then((response) => {
         if(response.status === 200){
             var a = document.createElement("a");
@@ -151,11 +151,12 @@ function download(){
 
 function loadExpenses(page) {
     let itemsPerPage=JSON.parse(localStorage.getItem('itemsPerPage'));
-    axios.get(`http://16.170.246.115:3000/expense/getexpense?page=${page}&limit=${itemsPerPage}`, {
+    axios.get(`http://127.0.0.1:3000/expense/getexpense?page=${page}&limit=${itemsPerPage}`, {
         headers: { 'Authorization': `Bearer ${token}` }
     })
     .then(result => {
         const { expenses, totalExpenses, totalPages } = result.data;
+        console.log(expenses);
 
         // Set totalPages dynamically
         window.totalPages = totalPages;
